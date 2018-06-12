@@ -2,41 +2,41 @@ sub inicializarParametrosQuestClasse2 {
     my ($manterOuGuardar) = @_;
     my %items = (
         #Possibilidade 1
-        713 => "1 0 0", #Garrafa Vazia
-        916 => "1 1 0", #Plumas de Ave
-        919 => "1 1 0", #Couro de Animal
+         713 => "1 0 0", #Garrafa Vazia
+         916 => "1 1 0", #Plumas de Ave
+         919 => "1 1 0", #Couro de Animal
         1019 => "1 1 0", #Tronco
         1024 => "1 1 0", #Tinta de Polvo
 
         #Possibilidade 2
         1050 => "5 1 0", #Tendão
-        960 => "5 1 0", #Garra de Crustáceo
-        963 => "5 1 0", #Escama Aquática
+         960 => "5 1 0", #Garra de Crustáceo
+         963 => "5 1 0", #Escama Aquática
     
         #Possibilidade 3
-        966 => "5 1 0", #Carne de Ostra
-        960 => "5 1 0", #Garra de Crustáceo
-        950 => "5 1 0", #Coração de Sereia
+         966 => "5 1 0", #Carne de Ostra
+         960 => "5 1 0", #Garra de Crustáceo
+         950 => "5 1 0", #Coração de Sereia
     
         #Possibilidade 4
         1052 => "5 1 0", #Célula Única
-        962 => "5 1 0", #Tentáculo
+         962 => "5 1 0", #Tentáculo
         1023 => "5 1 0", #Cauda de Peixe
     
         #Possibilidade 5
         1025 => "5 1 0", #Teia de Aranha
-        935 => "5 1 0", #Casca
-        928 => "5 1 0", #Antenas de Inseto
+         935 => "5 1 0", #Casca
+         928 => "5 1 0", #Antenas de Inseto
     
         #Possibilidade 6
         1057 => "5 1 0", #Pó de Traça
-        946 => "5 1 0", #Casco de Caramujo
-        947 => "5 1 0", #Chifre
+         946 => "5 1 0", #Casco de Caramujo
+         947 => "5 1 0", #Chifre
     
         #Possibilidade 7     
         1031 => "5 1 0", #Foice de Louca-a-Deus
-        955 => "5 1 0", #Pele de Verme
-        1013 => "5 1 0" #Casco Arco-Íris
+         955 => "5 1 0", #Pele de Verme
+        1013 => "5 1 0"  #Casco Arco-Íris
 
         #Possibilidade 8
         
@@ -57,6 +57,7 @@ automacro questSabio_salvarEmYuno {
     JobID $parametrosClasses{idC1}, $parametrosClasses{idBC1}
     JobLevel = 50
     ConfigKeyNot saveMap yuno
+    FreeSkillPoints = 0
     ConfigKeyNot naSequenciaDeSalvamento true
     ConfigKeyNot quest_eden em_curso
     ConfigKeyNot quest_eden terminando
@@ -92,6 +93,9 @@ automacro questSabio_salvarEmYuno {
 
 #Após salvar em Yuno, vai até o NPC onde iniciará a quest!#
 #Todas as quests de sábio devem estar desabilitadas#
+#2041#Mudança de Classe: Sábio#SG_FEEL#QUE_NOIMAGE#
+#Para prestar o exame de admissão, você precisa falar com o Professor Claytos. Ele está na sala à esquerda. #
+#Fale com o Examinador Teórico Claytos. #
 automacro questSabio_irAteOFuncionarioAcademico {
     JobID $parametrosClasses{idC1}, $parametrosClasses{idBC1}
     JobLevel = 50
@@ -142,6 +146,7 @@ automacro questSabio_falarComFuncionarioAcademico {
     JobID $parametrosClasses{idC1}, $parametrosClasses{idBC1}
     JobLevel = 50
     NpcNear /acadêmico/i
+    ConfigKey saveMap yuno
     InMap yuno_in03
     QuestInactive 2041
     QuestInactive 2042
@@ -174,6 +179,9 @@ automacro questSabio_falarComFuncionarioAcademico {
 
 #Terminou de conversar com o NPC, agora vai se encaminhar para outro#
 #Aqui a quest 2041 deve estar ativa!#
+#2041#Mudança de Classe: Sábio#SG_FEEL#QUE_NOIMAGE#
+#Para prestar o exame de admissão, você precisa falar com o Professor Claytos. Ele está na sala à esquerda. #
+#Fale com o Examinador Teórico Claytos. #
 automacro questSabio_irAteOExaminadorTeorico {
     NpcNotNear /teórico/i
     timeout 60
@@ -196,6 +204,7 @@ automacro questSabio_falarComOExaminadorTeorico {
     InMap yuno_in03
     QuestActive 2041
     timeout 60
+    ConfigKeyNot questSabio irProExamePratico
     NpcNear /teórico/i
     call {
         do talk $.NpcNearLastBinId
@@ -234,7 +243,7 @@ automacro questSabio_faleiComEle_passeiNoTest {
 automacro questSabio_irAteOExaminadorPratico {
     NpcNotNear /prático/i
     exclusive 1
-    ConfigKey questSabio irProExamePratico #coloquei essa linha aqui
+    ConfigKey questSabio irProExamePratico
     QuestActive 2041
     InMap yuno, yuno_in03
     call {
@@ -246,14 +255,13 @@ automacro questSabio_falarComOExaminadorPratico {
     InMap yuno, yuno_in03
     QuestActive 2041
     exclusive 1
-    ConfigKey questSabio irProExamePratico #coloquei essa liha aqui aqui
+    ConfigKey questSabio irProExamePratico 
     NpcNear /prático/i
     call {
         do move 169 180
         call pararDeAtacarApenasCorrer
         do talknpc 169 180
         do talk resp 0
-        do conf -f questSabio chegueiNaSalaDeEspera
     }
 }
 
@@ -263,14 +271,12 @@ automacro questSabio_falarComOExaminadorPratico {
 automacro questSabio_labirintoMoverPraPertoDoChat {
     QuestActive 2041
     InChatRoom 0
-    IsInCoordinate 50 154
-    ConfigKey questSabio chegueiNaSalaDeEspera
+    IsInCoordinate 45..55 149..158
     InMap job_sage
     call {
         do conf route_randomWalk 0
         do move job_sage 50 162 &rand(2,4)
         do chat join 0
-        do conf -f questSabio movendoPertoDoChat
     }
 }
 
@@ -279,19 +285,16 @@ automacro questSabio_labirintoChatPerto {
     InChatRoom 0
     ChatRoomNear /Espera|Waiting/i
     IsInCoordinate 38..61 177..154
-    ConfigKey questSabio movendoPertoDoChat
     InMap job_sage
     priority -1
     call {
         do chat join 0
-        do conf -f questSabio entrarNoChat
     }
 }
 
 automacro questSabio_DentroDoChat {
     InChatRoom 1
     QuestActive 2041
-    ConfigKey questSabio entrarNoChat
     InMap job_sage
     timeout 40
     call {
@@ -314,48 +317,56 @@ automacro questSabio_labirinto {
     call {
         do conf lockMap none if (&config(lockMap) != none)
         call voltarAtacar
+        do conf attackAuto_inLockOnly 0
         do conf -f questSabio atacandoMobs
     }
 }
 
-automacro questSabio_saiDoLabirinto
+automacro questSabio_saiDoLabirinto {
     QuestActive 2041
     ConfigKey questSabio atacandoMobs
-    InMap yuno_in03, yuno
-    exclusive 1
+    InMap yuno_in03
+    timeout 60
     NpcNear /prático/i
     call {
         call pararDeAtacarApenasCorrer
         do talknpc 169 180 #Aqui não tem alternativas, ele só vai te indicar o próximo NPC a conversar...#
         do conf -f questSabio termineiOTestePratico
     }
+}
 
-automacro questSabio_faleiComEle_passeiNoTestePratico {
+automacro questSabio_falarComSapien {
+    NpcMsgName /sapien lylees/i /prático/i
+    exclusive 1
     QuestActive 2041
-    InMap yuno_in03, yuno
-    NpcNear /prático/i
-    ConfigKey questSabio termineiOTestePratico
-    if NpcMsgName /sapien lylees/i /prático/i {
-        do move 62 177 &rand(3,5)
+    call {
+        do move yuno_in03 62 177 &rand(3,5)
         do talknpc 62 176 #Como o meu foi outro, precisa ver as respostas aqui, acho que também deve ser r0 r0#
         do conf -f questSabio buscarOsItens
-    } elsif NpcMsgName /ruthy celsus/i /prático/i {
-        do move 32 99 &rand(3,5)
+    }
+}
+
+automacro questSabio_falarComRuthy {
+    NpcMsgName /ruthy celsus/i /prático/i
+    exclusive 1
+    QuestActive 2041
+    call {
+        do move yuno_in03 32 99 &rand(3,5)
         do talknpc 32 102 r0 r0 #Aqui ele vai pedir os itens que tem de trazer...#
         do conf -f questSabio buscarOsItens
-    } elsif NpcMsgName /evecy georgy/i /prático/i {
-        do move 240 29 &rand(3,5)
+    }
+}
+
+automacro questSabio_falarComEvecy {
+    NpcMsgName /evecy georgy/i /prático/i
+    exclusive 1
+    QuestActive 2041
+    call {
+        do move yuno_in03 240 29 &rand(3,5)
         do talknpc 244 31 #Como o meu foi outro, precisa ver as respostas aqui, acho que também deve ser r0 r0#
         do conf -f questSabio buscarOsItens
-    } else {
-        [
-            log ==============================================================================
-            log Deveria estar coletando me preparando para coletar os itens que foram pedidos!
-            log Mas algo deu errado... Reporte aos criadores dessa eventMacro.
-            log ==============================================================================
-            ]
     }
-    
+}    
 
 #coloque esse if dentro da macro que tiver checando o item
 #substitua item pelo item que quer, e o número 5 pela quantidade que precisa
@@ -365,98 +376,98 @@ automacro questSabio_faleiComEle_passeiNoTestePratico {
 #       call pegarItemDoArmazenSeTiver "NOME" "5"
 #   }
 
+#2055#Mudança de Classe: Sábio#SG_FEEL#QUE_NOIMAGE#
+#Sou o Professor Lucius; lembre-se que minha aula tem muitas excursões. Então, preciso que você me traga algumas coisas. #
+#5 Tendões, 5 Garras de Crustáceo, 5 Escamas Afiadas #
 automacro questSabio_coletarItens_possibilidade2 {
-    QuestActive 2047
-    QuestActive 2048
-    QuestActive 2049
+    QuestActive 2055
     exclusive 1
     timeout 120
     ConfigKeyNot passo_quest_sabio indo entregar itens
     call {
-        $qtdItem1 = &invamount(Tendões)
-        $qtdItem2 = &invamount(Garra de Crustáceo)
-        $qtdItem3 = &invamount(Escama Aquática)
-
-        call voltarAtacar
-
-        if (&storamount($qtdItem1) >= 0 && &invamount($qtdItem1) =< 5) {
-        log Tenho que ir no armazem pegar!
-        call checarSeArmazenJaFoiAberto
-        call pegarItemDoArmazenSeTiver "$qtdItem1" "5"
-        } elsif ( $qtdItem1 < 5 ) {
-            do conf lockMap iz_dun03
-        } 
-        if (&storamount($qtdItem2) >= 0 && &invamount($qtdItem2) =< 5) {
-        log Tenho que ir no armazem pegar!
-        call checarSeArmazenJaFoiAberto
-        call pegarItemDoArmazenSeTiver "$qtdItem2" "5"
-        } elsif ( $qtdItem1 >= 5 && $qtdItem2 < 5 ) {
-            do conf lockMap iz_dun00
-        if (&storamount($qtdItem3) >= 0 && &invamount($qtdItem3) =< 5) {
-        log Tenho que ir no armazem pegar!
-        call checarSeArmazenJaFoiAberto
-        call pegarItemDoArmazenSeTiver "$qtdItem3" "5"
-        } elsif ( $qtdItem1 >= 5 && $qtdItem2 >= 5 && $qtdItem3 < 5) {
-            do conf lockMap iz_dun03
-        } elsif ( $qtdItem1 >= 5 && $qtdItem2 >= 5 && $qtdItem3 >= 5) {
-            [
-            log ================================
-            log Coletei todos os itens, indo Entregar!
-            log ================================
-            ]
-            do conf -f passo_quest_sabio indo entregar itens
-        } else {
-            [
-            log ====================================================
-            log Deveria estar coletando 5 Tendões, 5 Garras de Crustáceo e 5 Escamas Aquáticas!
-            log Mas algo deu errado... reporte aos criadores dessa eventMacro
-            log ====================================================
-            ]
-        }
+        
+        $item1{nomeDoItem} = Tendões
+        $item1{idDoItem}   = 1050
+        $item1{lockMap}    = iz_dun03
+        
+        $item2{nomeDoItem} = Garra de Crustáceo
+        $item2{idDoItem}   = 960
+        $item2{lockMap}    = iz_dun00
+        
+        $item3{nomeDoItem} = Escama Afiada
+        $item3{idDoItem}   = 906
+        $item3{lockMap}    = iz_dun03
+        
+        call decidirLockMapProItem
     }
 }
 
-
+#2054#Mudança de Classe: Sábio#SG_FEEL#QUE_NOIMAGE#
+#Sou o Professor Lucius; lembre-se que minha aula tem muitas excursões. Então, preciso que você me traga algumas coisas. #
+#5 Garras de Crustáceo, 5 Carnes de Ostra, 5 Corações de Sereia #
 automacro questCacador_coletarItens_possibilidade3 {
-    QuestActive 2047
-    QuestActive 2048
-    QuestActive 2049
+    QuestActive 2054
     exclusive 1
     timeout 120
     ConfigKeyNot passo_quest_sabio indo entregar itens
     call {
-        $qtdItem1 = &invamount(Carne de Ostra)
-        $qtdItem2 = &invamount(Garra de Crustáceo)
-        $qtdItem3 = &invamount(Coração de Sereia)
 
-        call voltarAtacar
+        $item1{nomeDoItem} = Carne de Ostra
+        $item1{idDoItem}   = 966
+        $item1{lockMap}    = hu_fild06
+        
+        $item2{nomeDoItem} = Garra de Crustáceo
+        $item2{idDoItem}   = 960
+        $item2{lockMap}    = iz_dun00
+        
+        $item3{nomeDoItem} = Coração de Sereia
+        $item3{idDoItem}   = 950
+        $item3{lockMap}    = iz_dun02
+        
+        call decidirLockMapProItem
 
-        if ( $qtdItem1 < 5 ) {
-            call aeroplano_junoPara "hugel"
-            do conf lockMap hu_fild06
-        } elsif ( $qtdItem1 >= 5 && $qtdItem2 < 5 ) {
-            call aeroplano_hugelPara "izlude"
-            do conf lockMap iz_dun00
-        } elsif ( $qtdItem1 >= 5 && $qtdItem2 >= 5 && $qtdItem3 < 5) {
-            do conf lockMap iz_dun02
-        } elsif ( $qtdItem1 >= 5 && $qtdItem2 >= 5 && $qtdItem3 >= 5) {
-            [
-            log ================================
-            log Coletei todos os itens, indo Entregar!
-            log ================================
-            ]
-            do conf -f passo_quest_sabio indo entregar itens
-        } else {
-            [
-            log ====================================================
-            log Deveria estar coletando 5 Carne de Ostra, 5 Garra de Crustáceo e 5 Coração de Sereia
-            log Mas algo deu errado... reporte aos criadores dessa eventMacro
-            log ====================================================
-            ]
-        }
     }
 }
 
+macro decidirLockMapProItem {
+    call voltarAtacar
+    
+    $item1{qtdQuePreciso} = pegarConfigItemsControl("$item1{idDoItem}", "keep")
+    $item2{qtdQuePreciso} = pegarConfigItemsControl("$item2{idDoItem}", "keep")
+    $item3{qtdQuePreciso} = pegarConfigItemsControl("$item3{idDoItem}", "keep")
+    
+    if ( &invamount($item1{idDoItem}) < $item1{qtdQuePreciso} ) {
+        do conf lockMap $item1{lockMap}
+        call pegarItemDoArmazenSeTiver "$item1{idDoItem}" "$item1{qtdQuePreciso}"
+        
+    } elsif ( &invamount($item1{idDoItem}) >= $item1{qtdQuePreciso} && &invamount($item2{idDoItem}) < $item2{qtdQuePreciso} ) {
+        do conf lockMap $item1{lockMap}
+        call pegarItemDoArmazenSeTiver "$item2{idDoItem}" "$item2{qtdQuePreciso}"
+        
+    } elsif ( &invamount($item1{idDoItem}) >= $item1{qtdQuePreciso} && &invamount($item2{idDoItem}) >= $item2{qtdQuePreciso} && &invamount($item3{idDoItem}) < $item3{qtdQuePreciso}) {
+        do conf lockMap $item1{lockMap}
+        call pegarItemDoArmazenSeTiver "$item3{idDoItem}" "$item3{qtdQuePreciso}"
+        
+    } elsif ( &invamount($item1{idDoItem}) >= $item1{qtdQuePreciso} && &invamount($item2{idDoItem}) >= $item2{qtdQuePreciso} && &invamount($item3{idDoItem}) >= $item3{qtdQuePreciso}) {
+        [
+        log ================================
+        log Coletei todos os itens, indo Entregar!
+        log ================================
+        ]
+        do conf -f passo_quest_cacador indo entregar itens
+        
+    } else {
+        [
+        log ====================================================
+        log Deveria estar coletando:
+        log $item1{qtdQuePreciso} $item1{nomeDoItem},
+        log $item2{qtdQuePreciso} $item2{nomeDoItem} e
+        log $item3{qtdQuePreciso} $item3{nomeDoItem} agora
+        log Mas algo deu errado... reporte aos criadores dessa eventMacro
+        log ====================================================
+        ]
+    }
+}
 
 automacro questSabio_coletarItens_possibilidade4 {
     QuestActive 2041
